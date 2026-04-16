@@ -29,7 +29,7 @@ router.get("/map-data", async (req, res) => {
 router.post("/create", authMiddleware, async (req, res) => {
   try {
     const { title, description, category, location, media, isEmergency, isRepeat, isSensitiveArea, linkedTicketId } = req.body || {};
-    
+
     if (!title || !description || !category || !location) {
       return res.status(400).json({ code: "VALIDATION_ERROR", message: "Missing required complaint fields" });
     }
@@ -45,7 +45,7 @@ router.post("/create", authMiddleware, async (req, res) => {
 
     const isDuplicate = !!duplicateMatch || !!linkedTicketId;
     const resolvedLinkedTicketId = linkedTicketId ? String(linkedTicketId).trim() : (duplicateMatch ? duplicateMatch.ticketId : null);
-    
+
     // RECURRING LOGIC
     // Check if same category in same area occurred >= 3 times in 30 days
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
@@ -134,7 +134,7 @@ router.get("/", authMiddleware, async (req, res) => {
   try {
     let query = {};
     if (req.user.role !== "officer" && req.user.role !== "admin") {
-      query = { userId: req.user.userId }; 
+      query = { userId: req.user.userId };
     }
     const complaints = await Complaint.find(query)
       .populate("assignedOfficer", "name role email")
@@ -161,14 +161,14 @@ router.get("/:id", authMiddleware, async (req, res) => {
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const { status, priority, description, media, assignedOfficer, remarks, proof } = req.body || {};
-    
+
     // Security check: Officers can edit any ticket, citizens can only edit their own.
     const query = (req.user.role === "officer" || req.user.role === "admin")
       ? { _id: req.params.id }
       : { _id: req.params.id, userId: req.user.userId };
 
     const complaint = await Complaint.findOne(query);
-    
+
     if (!complaint) return res.status(404).json({ code: "NOT_FOUND", message: "Complaint not found or forbidden" });
 
     if (status !== undefined) complaint.status = status;

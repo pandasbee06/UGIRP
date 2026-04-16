@@ -63,8 +63,8 @@ app.post("/api/auth/register", async (req, res) => {
     });
 
     const token = jwt.sign({ sub: String(user._id), email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
-    return res.status(201).json({ 
-      ok: true, 
+    return res.status(201).json({
+      ok: true,
       message: "Registered successfully.",
       token,
       user: { id: String(user._id), name: user.name, email: user.email, role: user.role, trustScore: user.trustScore }
@@ -137,7 +137,7 @@ app.post("/api/auth/resend-otp", async (req, res) => {
   try {
     const { email } = req.body || {};
     if (!email) return res.status(400).json({ code: "VALIDATION_ERROR", message: "email is required" });
-    
+
     const emailNorm = String(email).trim().toLowerCase();
     const user = await User.findOne({ email: emailNorm });
     if (!user) return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" });
@@ -227,7 +227,7 @@ async function start() {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is required (set it in server/.env)");
   }
-  
+
   try {
     // Attempt local connection with a short timeout
     await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 2000 });

@@ -11,7 +11,7 @@ router.get("/", authMiddleware, async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(10)
       .lean();
-      
+
     return res.status(200).json({ ok: true, data: notifications });
   } catch (e) {
     return res.status(500).json({ code: "INTERNAL_ERROR", message: "Failed to fetch notifications" });

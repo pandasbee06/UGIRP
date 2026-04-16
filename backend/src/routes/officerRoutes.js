@@ -30,10 +30,10 @@ router.get("/my-complaints", authMiddleware, requireOfficer, async (req, res) =>
 router.put("/update/:id", authMiddleware, requireOfficer, async (req, res) => {
   try {
     const { status, remarks } = req.body || {};
-    
-    const complaint = await Complaint.findOne({ 
-      _id: req.params.id, 
-      assignedOfficer: req.user.userId 
+
+    const complaint = await Complaint.findOne({
+      _id: req.params.id,
+      assignedOfficer: req.user.userId
     });
 
     if (!complaint) {
@@ -44,7 +44,7 @@ router.put("/update/:id", authMiddleware, requireOfficer, async (req, res) => {
     if (status && (status === "Resolved" || status === "Rejected") && !complaint.isEvaluated) {
       const citizen = await User.findById(complaint.userId);
       const officer = await User.findById(req.user.userId);
-      
+
       if (citizen && officer) {
         // Evaluate Citizen
         if (status === "Resolved") { // Genuine
@@ -79,7 +79,7 @@ router.put("/update/:id", authMiddleware, requireOfficer, async (req, res) => {
         isUnread: true
       });
     }
-    
+
     if (remarks !== undefined) complaint.remarks = remarks;
 
     await complaint.save();
@@ -93,14 +93,14 @@ router.put("/update/:id", authMiddleware, requireOfficer, async (req, res) => {
 router.post("/upload-proof/:id", authMiddleware, requireOfficer, async (req, res) => {
   try {
     const { proof } = req.body || {};
-    
+
     if (!proof) {
       return res.status(400).json({ code: "VALIDATION_ERROR", message: "Proof data is required" });
     }
 
-    const complaint = await Complaint.findOne({ 
-      _id: req.params.id, 
-      assignedOfficer: req.user.userId 
+    const complaint = await Complaint.findOne({
+      _id: req.params.id,
+      assignedOfficer: req.user.userId
     });
 
     if (!complaint) {
@@ -109,7 +109,7 @@ router.post("/upload-proof/:id", authMiddleware, requireOfficer, async (req, res
 
     complaint.proof = proof;
     await complaint.save();
-    
+
     return res.status(200).json({ ok: true, message: "Proof uploaded successfully", data: complaint });
   } catch (e) {
     return res.status(500).json({ code: "INTERNAL_ERROR", message: e instanceof Error ? e.message : "Error" });
