@@ -171,14 +171,16 @@ app.get("/api/dashboard/data", authMiddleware, async (req, res) => {
     // Auto-seed mock data if this is a brand new user so the Dashboard looks nice
     let complaintsCount = await Complaint.countDocuments({ userId: user._id });
     if (complaintsCount === 0) {
-      // Use upsert so re-seeding doesn't throw duplicate key errors
+      // Seed demo complaints only if they don't already exist (query by ticketId only
+      // since ticketId has a unique index — querying by userId too causes duplicate key
+      // errors when a second user triggers the seed).
       await Complaint.updateOne(
-        { ticketId: "CMP-DEMO1B", userId: user._id },
+        { ticketId: "CMP-DEMO1B" },
         { $setOnInsert: { userId: user._id, ticketId: "CMP-DEMO1B", title: "Pothole Repair", category: "Pothole Repair", description: "Large pothole.", location: "Sector 4, Main Road", status: "Resolved", priority: "High" } },
         { upsert: true }
       );
       await Complaint.updateOne(
-        { ticketId: "CMP-DEMO2C", userId: user._id },
+        { ticketId: "CMP-DEMO2C" },
         { $setOnInsert: { userId: user._id, ticketId: "CMP-DEMO2C", title: "Streetlight Outage", category: "Streetlight Outage", description: "Light is out.", location: "Park Avenue", status: "In Progress", priority: "Medium" } },
         { upsert: true }
       );
