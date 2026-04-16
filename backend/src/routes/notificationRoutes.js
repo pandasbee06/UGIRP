@@ -22,8 +22,8 @@ router.get("/", authMiddleware, async (req, res) => {
 router.put("/read", authMiddleware, async (req, res) => {
   try {
     await Notification.updateMany(
-      { userId: req.user.userId, isNew: true },
-      { $set: { isNew: false } }
+      { userId: req.user.userId, isUnread: true },
+      { $set: { isUnread: false } }
     );
     return res.status(200).json({ ok: true, message: "Notifications marked as read" });
   } catch (e) {

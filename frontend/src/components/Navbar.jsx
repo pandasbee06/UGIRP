@@ -54,7 +54,7 @@ export default function Navbar() {
       const res = await apiJson("/api/notifications");
       if (res.ok) {
         setNotifications(res.data);
-        setUnreadCount(res.data.filter(n => n.isNew).length);
+        setUnreadCount(res.data.filter(n => n.isUnread).length);
       }
     } catch (e) {
       console.error("Failed to load notifications");
@@ -66,7 +66,7 @@ export default function Navbar() {
     try {
       await apiJson("/api/notifications/read", { method: "PUT" });
       setUnreadCount(0);
-      setNotifications(prev => prev.map(n => ({ ...n, isNew: false })));
+      setNotifications(prev => prev.map(n => ({ ...n, isUnread: false })));
     } catch (e) { }
   };
 
@@ -165,7 +165,7 @@ export default function Navbar() {
                       <div className="p-4 text-center text-sm text-slate-500">No new notifications</div>
                     ) : (
                       notifications.map(n => (
-                        <div key={n._id} className={`rounded-xl p-3 text-sm transition-colors ${n.isNew ? 'bg-indigo-50 dark:bg-indigo-500/10' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
+                        <div key={n._id} className={`rounded-xl p-3 text-sm transition-colors ${n.isUnread ? 'bg-indigo-50 dark:bg-indigo-500/10' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
                           <div className="font-semibold text-slate-900 dark:text-white mb-0.5">{n.title}</div>
                           <div className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">{n.message}</div>
                         </div>

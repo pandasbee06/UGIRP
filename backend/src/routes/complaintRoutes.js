@@ -108,7 +108,7 @@ router.post("/create", authMiddleware, async (req, res) => {
       userId: req.user.userId,
       title: "Complaint Filed Successfully",
       message: `Your complaint ${ticketId} has been registered and is pending review.`,
-      isNew: true
+      isUnread: true
     });
 
     if (adminFlagged) {
@@ -118,7 +118,7 @@ router.post("/create", authMiddleware, async (req, res) => {
           userId: admin._id,
           title: "System Alert: Recurring Issue Detected",
           message: `Ticket ${ticketId} triggered a recurring issue flag for ${category} at ${location}. Priority escalated to Critical automatically.`,
-          isNew: true
+          isUnread: true
         });
       }
     }

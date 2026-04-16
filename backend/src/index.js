@@ -183,8 +183,8 @@ app.get("/api/dashboard/data", authMiddleware, async (req, res) => {
         { upsert: true }
       );
       await Notification.insertMany([
-        { userId: user._id, title: "Welcome to UGIRP", message: "Your citizen account has been successfully verified without OTP.", isNew: false },
-        { userId: user._id, title: "Status Update", message: "Action initiated for your Streetlight complaint by civic authorities.", isNew: true }
+        { userId: user._id, title: "Welcome to UGIRP", message: "Your citizen account has been successfully verified without OTP.", isUnread: false },
+        { userId: user._id, title: "Status Update", message: "Action initiated for your Streetlight complaint by civic authorities.", isUnread: true }
       ]);
     }
 
@@ -213,7 +213,7 @@ app.get("/api/dashboard/data", authMiddleware, async (req, res) => {
         title: n.title,
         msg: n.message,
         time: "Recently", // Simplistic mock time layout
-        isNew: n.isNew
+        isNew: n.isUnread
       }))
     });
   } catch (e) {

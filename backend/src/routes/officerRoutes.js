@@ -76,7 +76,7 @@ router.put("/update/:id", authMiddleware, requireOfficer, async (req, res) => {
         userId: complaint.userId,
         title: status === "Resolved" ? "Complaint Resolved" : "Status Updated",
         message: `Your complaint ${complaint.ticketId} status has been updated to: ${status}.`,
-        isNew: true
+        isUnread: true
       });
     }
     

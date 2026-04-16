@@ -164,13 +164,13 @@ router.put("/assign/:complaintId", authMiddleware, requireAdmin, async (req, res
       userId: complaint.userId,
       title: "Officer Assigned",
       message: `An official has been assigned to investigate your complaint ${complaint.ticketId}.`,
-      isNew: true
+      isUnread: true
     });
     await Notification.create({
       userId: officerId,
       title: "New Ticket Assignment",
       message: `You have been manually assigned to investigate ticket ${complaint.ticketId}.`,
-      isNew: true
+      isUnread: true
     });
 
     return res.status(200).json({ ok: true, message: "Manual Assignment Successful", data: complaint });
