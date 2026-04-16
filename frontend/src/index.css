@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@layer base {
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer base {
+  .dark body {
+    @apply bg-slate-950 text-slate-50;
+  }
+}

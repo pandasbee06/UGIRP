@@ -1,0 +1,6 @@
+node_modules/
+.env
+.otp-logs.txt
+backend/db/*.sqlite
+backend/db/*.sqlite-shm
+backend/db/*.sqlite-wal
